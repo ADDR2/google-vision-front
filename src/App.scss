@@ -1,0 +1,62 @@
+.App {
+  text-align: center;
+
+  &.no-image {
+    margin: 22rem 0 0 0;
+  }
+
+  & > img {
+    max-width: 500px;
+    max-height: 500px;
+  }
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+}
+
+.input-file {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+
+  & + label {
+    width: fit-content;
+    color: white;
+    background-color: #388438;
+    cursor: pointer;
+    padding: 0.6rem;
+    border-radius: 0.3rem;
+    font-family: sans-serif;
+    margin-right: 0.2rem;
+
+    &:hover {
+      background-color: darken(#388438, 10%);
+    }
+
+    & * {
+      pointer-events: none; 
+    }
+  }
+
+  &:focus + label {
+    background-color: darken(#388438, 10%);
+    outline: 1px dotted #000;
+	  outline: -webkit-focus-ring-color auto 5px;
+  }
+}
+
+.file-name {
+  margin: 0 0 0.6rem 0;
+}
+
+.json-parsed {
+  width: 50%;
+  height: 50vh;
+  margin-top: 1rem;
+  resize: none;
+}

@@ -1,0 +1,6 @@
+@import '../globals/layout.scss';
+
+.json-result-container {
+    @include three-column-layout;
+    margin-top: 1rem;
+}

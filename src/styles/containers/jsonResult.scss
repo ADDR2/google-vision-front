@@ -4,3 +4,9 @@
     @include three-column-layout;
     margin-top: 1rem;
 }
+
+.json-result {
+    text-align: left;
+    display: flex;
+    justify-content: center;
+}

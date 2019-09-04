@@ -8,13 +8,13 @@ const defaultProperties = {
     collapseStringsAfterLength: 5,
     indentWidth: 10,
     style: {
-        textAlign: 'left',
         minHeight: '50vh',
+        minWidth: '500px',
         maxWidth: '500px',
         maxHeight: '50vh',
         overflow: 'auto'
     },
-    enableClipboard: true,
+    enableClipboard: false,
     displayDataTypes: true,
     displayObjectSize: true,
     collapsed: true
@@ -23,12 +23,14 @@ const defaultProperties = {
 export default ({ json }) => {
     return <div className="json-result-container">
     {
-        Array(3).fill(
-            <ReactJson
-                src={json}
-                { ...defaultProperties }
-            />
-        )
+        Array(3).fill().map((_, index) => (
+            <div key={index} className="json-result">
+                <ReactJson
+                    src={json}
+                    { ...defaultProperties }
+                />
+            </div>
+        ))
     }
     </div>
 };

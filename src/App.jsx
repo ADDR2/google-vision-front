@@ -40,7 +40,7 @@ class App extends React.Component {
 		try {
 			this.setState({ json: '' });
 			const { data: { body } } = await post(
-				'http://localhost:3001',
+				'http://localhost:3001/analyze-image',
 				this.imgInputRef.current.files[0],
 				{
 					headers: {
@@ -60,7 +60,11 @@ class App extends React.Component {
 			<div className={ preview ? 'App' : 'App no-image' }>
 				{ preview ?
 						<div className="image-container">
-							{ Array(3).fill(<img className="image" src={preview}/>) }
+							{
+								Array(3).fill().map((_, index) => (
+									<img alt="Input" key={index} className="image" src={preview}/>
+								))
+							}
 						</div>
 					:
 						<></>

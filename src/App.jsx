@@ -2,6 +2,8 @@ import React from 'react';
 import { post } from 'axios';
 import Button from '@material-ui/core/Button';
 import JsonResult from './containers/jsonResults';
+import Images from './containers/images';
+import dataURLToBlob from './helpers/dataURLToBlob';
 import './App.scss';
 
 class App extends React.Component {
@@ -12,13 +14,45 @@ class App extends React.Component {
 		this.reader = new FileReader();
 
 		this.reader.onload = () => {
-			this.setState({ preview: [this.reader.result] });
+			const image = new Image();
+
+			image.onload = () => {
+				const canvas = document.createElement('canvas');
+				const max_size = 500;
+				let width = image.width;
+				let height = image.height;
+
+                if (width > height) {
+                    if (width > max_size) {
+                        height *= max_size / width;
+                        width = max_size;
+                    }
+                } else {
+                    if (height > max_size) {
+                        width *= max_size / height;
+                        height = max_size;
+                    }
+				}
+				
+                canvas.width = width;
+				canvas.height = height;
+                canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+				const dataUrl = canvas.toDataURL('image/jpeg');
+				const resizedImage = dataURLToBlob(dataUrl);
+
+				this.setState({ preview: [dataUrl], file: resizedImage });
+			};
+
+			image.src = this.reader.result;
 		};
 
 		this.state = {
 			preview: null,
 			loadedFileName: '',
-			json: ''
+			json: null,
+			Moderation: null,
+			Faces: null,
+			file: null
 		};
 	}
 
@@ -32,39 +66,37 @@ class App extends React.Component {
 
 		this.setState({
 			...newState,
-			loadedFileName: file.name
+			loadedFileName: file.name,
+			Faces: null
 		});
 	}
 
 	sendImage = async () => {
 		try {
-			this.setState({ json: '' });
-			const { data: { body } } = await post(
+			this.setState({ json: null, Moderation: null, Faces: null });
+			const { data: { body: { JsonResults, Moderation, Faces } } } = await post(
 				'http://localhost:3001/analyze-image',
-				this.imgInputRef.current.files[0],
+				this.state.file,
 				{
 					headers: {
 						'content-type': 'text/plain'
 					}
 				}
 			);
-			this.setState({ json: body });
+			this.setState({ json: JsonResults, Moderation, Faces });
 		} catch(error) {
 			console.error('Could not send image');
 		}
 	}
 
 	render() {
-		const { preview, loadedFileName, json } = this.state;
+		const { preview, loadedFileName, json, Faces } = this.state;
+
 		return (
 			<div className={ preview ? 'App' : 'App no-image' }>
 				{ preview ?
 						<div className="image-container">
-							{
-								Array(3).fill().map((_, index) => (
-									<img alt="Input" key={index} className="image" src={preview}/>
-								))
-							}
+							<Images preview={preview} faces={Faces}/>
 						</div>
 					:
 						<></>

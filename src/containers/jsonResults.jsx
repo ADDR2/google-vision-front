@@ -6,7 +6,7 @@ const defaultProperties = {
     theme: "monokai",
     iconStyle: "square",
     collapseStringsAfterLength: 5,
-    indentWidth: 10,
+    indentWidth: 5,
     style: {
         minHeight: '50vh',
         minWidth: '500px',

@@ -17,12 +17,6 @@ body {
   @include three-column-layout;
 }
 
-.image {
-  margin: 0 auto;
-  max-width: 500px;
-  max-height: 500px;
-}
-
 .buttons-container {
   display: flex;
   justify-content: center;

@@ -36,9 +36,15 @@ body {
     background-color: $choose-file-background;
     cursor: pointer;
     padding: 0.6rem;
-    border-radius: 0.3rem;
     font-family: sans-serif;
     margin-right: 0.2rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.75;
+    border-radius: 4px;
+    letter-spacing: 0.02857em;
+    text-transform: uppercase;
 
     &:hover {
       background-color: darken($choose-file-background, 10%);
@@ -51,8 +57,6 @@ body {
 
   &:focus + label {
     background-color: darken($choose-file-background, 10%);
-    outline: 1px dotted #000;
-	  outline: -webkit-focus-ring-color auto 5px;
   }
 }
 

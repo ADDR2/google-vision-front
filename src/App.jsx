@@ -57,6 +57,8 @@ class App extends React.Component {
 	}
 
 	previewImage = ({ target: { files: [ file ] } }) => {
+		if (!file) return console.warn('No file selected');
+
 		if (file.size < 1000000) this.reader.readAsDataURL(file);
 		else console.warn('Too large image');
 
@@ -112,7 +114,7 @@ class App extends React.Component {
 						ref={this.imgInputRef}
 						onChange={this.previewImage}
 					></input>
-					<label htmlFor="pic"><strong>Choose a file</strong></label>
+					<label htmlFor="pic">Choose a file</label>
 					<Button
 						variant="contained"
 						color="primary"

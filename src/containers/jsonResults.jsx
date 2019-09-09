@@ -5,7 +5,7 @@ import '../styles/containers/jsonResult.scss';
 const defaultProperties = {
     theme: "monokai",
     iconStyle: "square",
-    collapseStringsAfterLength: 5,
+    collapseStringsAfterLength: 10,
     indentWidth: 5,
     style: {
         minHeight: '50vh',
@@ -24,7 +24,7 @@ export default ({ json }) => {
     return <div className="json-result-container">
     {
         Array(3).fill().map((_, index) => (
-            <div key={index} className="json-result">
+            <div key={`json-${index}`} className="json-result">
                 <ReactJson
                     src={json}
                     { ...defaultProperties }

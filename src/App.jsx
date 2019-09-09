@@ -58,7 +58,7 @@ class App extends React.Component {
 
 	previewImage = ({ target: { files: [ file ] } }) => {
 		const newState = {};
-		if (file.size < 500000) this.reader.readAsDataURL(file);
+		if (file.size < 1000000) this.reader.readAsDataURL(file);
 		else {
 			console.warn('Too large image');
 			newState.preview = null;
@@ -76,7 +76,7 @@ class App extends React.Component {
 			this.setState({ json: null, Moderation: null, Faces: null });
 			const { data: { body: { JsonResults, Moderation, Faces } } } = await post(
 				'http://localhost:3001/analyze-image',
-				this.state.file,
+				this.state.file || this.imgInputRef.current.files[0],
 				{
 					headers: {
 						'content-type': 'text/plain'

@@ -21,16 +21,12 @@ const defaultProperties = {
 };
 
 export default ({ json }) => {
-    return <div className="json-result-container">
-    {
-        Array(3).fill().map((_, index) => (
-            <div key={`json-${index}`} className="json-result">
-                <ReactJson
-                    src={json}
-                    { ...defaultProperties }
-                />
-            </div>
-        ))
-    }
-    </div>
+    return (
+        <div className="json-result">
+            <ReactJson
+                src={json}
+                { ...defaultProperties }
+            />
+        </div>
+    );
 };

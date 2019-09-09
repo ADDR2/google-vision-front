@@ -10,9 +10,8 @@ const defaultStyles = {
 };
 
 export default ({ preview, faces }) => {
-
-    return Array(3).fill().map((_, index) => (
-        <div className="canvas" key={`image-container-${index}`}>
+    return (
+        <div className="canvas">
             <img alt="Input" className="image" src={preview}/>
             { faces ?
                     faces.map(({ Box: { Top, Left, Width, Height }, Landmarks }, index) => (
@@ -33,5 +32,5 @@ export default ({ preview, faces }) => {
                     <></>
             }
         </div>
-    ))
+    );
 };

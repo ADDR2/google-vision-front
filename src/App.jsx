@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import JsonResult from './containers/jsonResults';
 import Images from './containers/images';
 import dataURLToBlob from './helpers/dataURLToBlob';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import './App.scss';
 
 class App extends React.Component {
@@ -49,10 +50,11 @@ class App extends React.Component {
 		this.state = {
 			preview: null,
 			loadedFileName: '',
-			json: null,
-			Moderation: null,
-			Faces: null,
-			file: {}
+			jsons: [],
+			Moderations: [],
+			Faces: [],
+			file: {},
+			sending: Array(3).fill(false)
 		};
 	}
 
@@ -66,40 +68,78 @@ class App extends React.Component {
 			preview: null,
 			file: {},
 			loadedFileName: file.name,
-			Faces: null
+			Faces: []
 		});
 	}
 
-	sendImage = async () => {
+	addDataToState(index, { JsonResults, Moderation, Faces: resultingFaces }) {
+		const { jsons, Moderations, Faces, sending } = this.state;
+		const newJsons = [ ...jsons ];
+		const newModerations = [ ...Moderations ];
+		const newFaces = [ ...Faces ];
+		const newSending = [ ...sending ];
+
+		newJsons[index] = JsonResults;
+		newModerations[index] = Moderation;
+		newFaces[index] = resultingFaces;
+		newSending[index] = false;
+
+		this.setState({
+			jsons: newJsons,
+			Moderations: newModerations,
+			Faces: newFaces,
+			sending: newSending
+		});
+	}
+
+	sendImage = () => {
 		try {
-			this.setState({ json: null, Moderation: null, Faces: null });
+			this.setState({ jsons: [], Moderations: [], Faces: [], sending: Array(3).fill(true) });
 
 			const { file } = this.state;
 			const queryParams = ('width' in file) ? `?width=${file.width}&height=${file.height}` : '';
-
-			const { data: { JsonResults, Moderation, Faces } } = await post(
-				'http://localhost:3001/analyze-image' + queryParams,
-				file.src || this.imgInputRef.current.files[0],
-				{
-					headers: {
-						'content-type': 'text/plain'
-					}
+			const body = file.src || this.imgInputRef.current.files[0];
+			const options = {
+				headers: {
+					'content-type': 'text/plain'
 				}
-			);
-			this.setState({ json: JsonResults, Moderation, Faces });
+			};
+
+			post('http://localhost:3001/analyze-image' + queryParams, body, options)
+				.then(({ data }) => this.addDataToState(0, data))
+				.catch(error => console.error('Error from AWS', error))
+			;
+
+			post('https://de71f106.ngrok.io/api/cognitveServices/analyze' + queryParams, body, options)
+				.then(({ data }) => this.addDataToState(1, data))
+				.catch(error => console.error('Error from Azure', error))
+			;
+
+			post('http://localhost:3001/analyze-image' + queryParams, body, options)
+				.then(({ data }) => this.addDataToState(2, data))
+				.catch(error => console.error('Error from Google', error))
+			;
 		} catch(error) {
 			console.error('Could not send image');
 		}
 	}
 
 	render() {
-		const { preview, loadedFileName, json, Faces } = this.state;
+		const { preview, loadedFileName, jsons, Faces, sending } = this.state;
 
 		return (
 			<div className={ preview ? 'App' : 'App no-image' }>
 				{ preview ?
 						<div className="image-container">
-							<Images preview={preview} faces={Faces}/>
+						{
+							sending.map((_, index) => (
+								<Images
+									key={`image-container-${index}`}
+									preview={preview}
+									faces={Faces[index]}
+								/>
+							))
+						}
 						</div>
 					:
 						<></>
@@ -121,7 +161,24 @@ class App extends React.Component {
 						onClick={this.sendImage}
 					>Try</Button>
 				</div>
-				{ json ? <JsonResult json={json} /> : <></> }
+				<div className="json-result-container">
+				{
+					sending.map((isSending, index) => (
+						isSending ?
+							<CircularProgress
+								key={`spinner-${index}`}
+								size={80}
+								style={{ margin: '0 auto' }}
+							/>
+						:
+							( jsons[index] ?
+								<JsonResult key={`spinner-${index}`} json={jsons[index]}/>
+							:
+								<div key={`spinner-${index}`}></div>
+							)
+					))
+				}
+				</div>
 			</div>
 		);
 	}

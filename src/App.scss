@@ -5,6 +5,11 @@ body {
   background-color: $background-theme;
 }
 
+.json-result-container {
+    @include three-column-layout;
+    margin-top: 1rem;
+}
+
 .App {
   text-align: center;
 

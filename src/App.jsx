@@ -8,6 +8,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import './App.scss';
 
 class App extends React.Component {
+	colors = [ '#ffff00', '#0000ff', '#ff0000' ];
+
 	constructor() {
 		super();
 
@@ -92,6 +94,26 @@ class App extends React.Component {
 		});
 	}
 
+	addEmptyResultToState(index) {
+		const { jsons, Moderations, Faces, sending } = this.state;
+		const newJsons = [ ...jsons ];
+		const newModerations = [ ...Moderations ];
+		const newFaces = [ ...Faces ];
+		const newSending = [ ...sending ];
+
+		newJsons[index] = {};
+		newModerations[index] = {};
+		newFaces[index] = {};
+		newSending[index] = false;
+
+		this.setState({
+			jsons: newJsons,
+			Moderations: newModerations,
+			Faces: newFaces,
+			sending: newSending
+		});
+	}
+
 	sendImage = () => {
 		try {
 			this.setState({ jsons: [], Moderations: [], Faces: [], sending: Array(3).fill(true) });
@@ -105,19 +127,28 @@ class App extends React.Component {
 				}
 			};
 
-			post('http://localhost:3001/analyze-image' + queryParams, body, options)
+			post('http://e478e8f2.ngrok.io/AWSImageRecognition' + queryParams, body, options)
 				.then(({ data }) => this.addDataToState(0, data))
-				.catch(error => console.error('Error from AWS', error))
+				.catch(error => {
+					this.addEmptyResultToState(0);
+					console.error('Error from AWS', error);
+				})
 			;
 
 			post('https://de71f106.ngrok.io/api/cognitveServices/analyze' + queryParams, body, options)
 				.then(({ data }) => this.addDataToState(1, data))
-				.catch(error => console.error('Error from Azure', error))
+				.catch(error => {
+					this.addEmptyResultToState(1);
+					console.error('Error from Azure', error);
+				})
 			;
 
 			post('http://localhost:3001/analyze-image' + queryParams, body, options)
 				.then(({ data }) => this.addDataToState(2, data))
-				.catch(error => console.error('Error from Google', error))
+				.catch(error => {
+					this.addEmptyResultToState(2);
+					console.error('Error from Google', error);
+				})
 			;
 		} catch(error) {
 			console.error('Could not send image');
@@ -137,6 +168,7 @@ class App extends React.Component {
 									key={`image-container-${index}`}
 									preview={preview}
 									faces={Faces[index]}
+									color={this.colors[index]}
 								/>
 							))
 						}

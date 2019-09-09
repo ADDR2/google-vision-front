@@ -9,7 +9,7 @@ const defaultStyles = {
     stroke: '#00ff00'
 };
 
-export default ({ preview, faces }) => {
+export default ({ preview, faces, color }) => {
     return (
         <div className="canvas">
             <img alt="Input" className="image" src={preview}/>
@@ -20,11 +20,11 @@ export default ({ preview, faces }) => {
                                 width={Width}
                                 height={Height}
                                 xmlns="http://www.w3.org/2000/svg"
-                                style={{ top: Top, left: Left, ...defaultStyles }}
+                                style={{ top: Top, left: Left, ...defaultStyles, stroke: color }}
                             >
                                 <rect x="0" y="0" width={Width} height={Height}/>
                             </svg>
-                            <LandmarkList Landmarks={Landmarks}/>
+                            <LandmarkList Landmarks={Landmarks} color={color}/>
                         </div>
                     ))
                 :

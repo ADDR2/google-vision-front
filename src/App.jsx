@@ -40,7 +40,7 @@ class App extends React.Component {
 				const dataUrl = canvas.toDataURL('image/jpeg');
 				const resizedImage = dataURLToBlob(dataUrl);
 
-				this.setState({ preview: [dataUrl], file: resizedImage });
+				this.setState({ preview: [dataUrl], file: { src: resizedImage, width, height } });
 			};
 
 			image.src = this.reader.result;
@@ -52,20 +52,17 @@ class App extends React.Component {
 			json: null,
 			Moderation: null,
 			Faces: null,
-			file: null
+			file: {}
 		};
 	}
 
 	previewImage = ({ target: { files: [ file ] } }) => {
-		const newState = {};
 		if (file.size < 1000000) this.reader.readAsDataURL(file);
-		else {
-			console.warn('Too large image');
-			newState.preview = null;
-		}
+		else console.warn('Too large image');
 
 		this.setState({
-			...newState,
+			preview: null,
+			file: {},
 			loadedFileName: file.name,
 			Faces: null
 		});
@@ -74,9 +71,13 @@ class App extends React.Component {
 	sendImage = async () => {
 		try {
 			this.setState({ json: null, Moderation: null, Faces: null });
-			const { data: { body: { JsonResults, Moderation, Faces } } } = await post(
-				'http://localhost:3001/analyze-image',
-				this.state.file || this.imgInputRef.current.files[0],
+
+			const { file } = this.state;
+			const queryParams = ('width' in file) ? `?width=${file.width}&height=${file.height}` : '';
+
+			const { data: { JsonResults, Moderation, Faces } } = await post(
+				'http://localhost:3001/analyze-image' + queryParams,
+				file.src || this.imgInputRef.current.files[0],
 				{
 					headers: {
 						'content-type': 'text/plain'

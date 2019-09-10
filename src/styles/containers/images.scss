@@ -6,4 +6,12 @@
 .canvas {
     position: relative;
     margin: 0 auto;
+
+    & > .logo {
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        max-width: 50px;
+        max-height: 50px;
+    }
 }

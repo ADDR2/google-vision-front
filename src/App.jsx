@@ -162,16 +162,17 @@ class App extends React.Component {
 			<div className={ preview ? 'App' : 'App no-image' }>
 				{ preview ?
 						<div className="image-container">
-						{
-							sending.map((_, index) => (
-								<Images
-									key={`image-container-${index}`}
-									preview={preview}
-									faces={Faces[index]}
-									color={this.colors[index]}
-								/>
-							))
-						}
+							{
+								sending.map((_, index) => (
+									<Images
+										key={`image-container-${index}`}
+										preview={preview}
+										faces={Faces[index]}
+										color={this.colors[index]}
+										index={index}
+									/>
+								))
+							}
 						</div>
 					:
 						<></>
@@ -200,7 +201,7 @@ class App extends React.Component {
 							<CircularProgress
 								key={`spinner-${index}`}
 								size={80}
-								style={{ margin: '0 auto' }}
+								style={{ margin: '5rem auto 0 auto' }}
 							/>
 						:
 							( jsons[index] ?

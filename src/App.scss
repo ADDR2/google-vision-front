@@ -24,7 +24,12 @@ body {
 
 .buttons-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+.header-container {
+  display: flex;
 }
 
 .input-file {
@@ -66,8 +71,10 @@ body {
 }
 
 .file-name {
-  margin: 0 0 0.6rem 0;
+  margin: 10px 20px;
   color: white;
+  text-transform: uppercase;
+  vertical-align: middle;
 }
 
 .json-parsed {
@@ -75,4 +82,10 @@ body {
   height: 50vh;
   margin-top: 1rem;
   resize: none;
+}
+
+.logo-hexacta {
+    width: auto;
+    height: 30px;
+    vertical-align: middle;
 }

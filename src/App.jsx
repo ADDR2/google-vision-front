@@ -6,6 +6,7 @@ import Images from './containers/images';
 import dataURLToBlob from './helpers/dataURLToBlob';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import './App.scss';
+import Logo from './assets/hexacta.png';
 
 class App extends React.Component {
 	colors = [ '#ffff00', '#0000ff', '#ff0000' ];
@@ -127,7 +128,7 @@ class App extends React.Component {
 				}
 			};
 
-			post('http://e478e8f2.ngrok.io/AWSImageRecognition' + queryParams, body, options)
+			post('http://localhost:8080/AWSImageRecognition' + queryParams, body, options)
 				.then(({ data }) => this.addDataToState(0, data))
 				.catch(error => {
 					this.addEmptyResultToState(0);
@@ -135,7 +136,7 @@ class App extends React.Component {
 				})
 			;
 
-			post('https://de71f106.ngrok.io/api/cognitveServices/analyze' + queryParams, body, options)
+			/*post('https://de71f106.ngrok.io/api/cognitveServices/analyze' + queryParams, body, options)
 				.then(({ data }) => this.addDataToState(1, data))
 				.catch(error => {
 					this.addEmptyResultToState(1);
@@ -149,7 +150,7 @@ class App extends React.Component {
 					this.addEmptyResultToState(2);
 					console.error('Error from Google', error);
 				})
-			;
+			;*/
 		} catch(error) {
 			console.error('Could not send image');
 		}
@@ -160,6 +161,28 @@ class App extends React.Component {
 
 		return (
 			<div className={ preview ? 'App' : 'App no-image' }>
+				
+				<div className="buttons-container">
+				<img alt="logo" className="logo-hexacta" src={Logo}/>
+					<span className="header-container">
+						{ loadedFileName ? <p className="file-name">{loadedFileName}</p> : <></> }
+							<input
+								className="input-file"
+								type="file"
+								id="pic"
+								accept="image/jpg"
+								ref={this.imgInputRef}
+								onChange={this.previewImage}
+							></input>
+							<label htmlFor="pic">Choose a file</label>
+							<Button
+								variant="contained"
+								color="primary"
+								onClick={this.sendImage}
+							>Try</Button>
+					</span>
+				</div>
+
 				{ preview ?
 						<div className="image-container">
 							{
@@ -177,23 +200,7 @@ class App extends React.Component {
 					:
 						<></>
 				}
-				{ loadedFileName ? <p className="file-name">{loadedFileName}</p> : <></> }
-				<div className="buttons-container">
-					<input
-						className="input-file"
-						type="file"
-						id="pic"
-						accept="image/jpg"
-						ref={this.imgInputRef}
-						onChange={this.previewImage}
-					></input>
-					<label htmlFor="pic">Choose a file</label>
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={this.sendImage}
-					>Try</Button>
-				</div>
+				
 				<div className="json-result-container">
 				{
 					sending.map((isSending, index) => (

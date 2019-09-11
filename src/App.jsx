@@ -22,7 +22,7 @@ class App extends React.Component {
 
 			image.onload = () => {
 				const canvas = document.createElement('canvas');
-				const max_size = 500;
+				const max_size = 600;
 				let width = image.width;
 				let height = image.height;
 
@@ -136,7 +136,7 @@ class App extends React.Component {
 				})
 			;
 
-			/*post('https://de71f106.ngrok.io/api/cognitveServices/analyze' + queryParams, body, options)
+			post('https://87e9835d.ngrok.io/api/cognitveServices/analyze' + queryParams, body, options)
 				.then(({ data }) => this.addDataToState(1, data))
 				.catch(error => {
 					this.addEmptyResultToState(1);
@@ -150,7 +150,7 @@ class App extends React.Component {
 					this.addEmptyResultToState(2);
 					console.error('Error from Google', error);
 				})
-			;*/
+			;
 		} catch(error) {
 			console.error('Could not send image');
 		}

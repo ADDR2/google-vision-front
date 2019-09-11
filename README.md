@@ -66,3 +66,9 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+### Related Repositories
+
+* [AWS API with Java](https://github.com/eamachine/aws-rekognition)
+* [Azure API with C#](https://github.com/hmunozc/azure-vision)
+* [Google Vision API with Node](https://github.com/ADDR2/meetup_google_vision)

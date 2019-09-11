@@ -103,7 +103,7 @@ class App extends React.Component {
 
 		newJsons[index] = {};
 		newModerations[index] = {};
-		newFaces[index] = {};
+		newFaces[index] = [];
 		newSending[index] = false;
 
 		this.setState({

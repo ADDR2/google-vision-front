@@ -120,7 +120,8 @@ class App extends React.Component {
 			this.setState({ jsons: [], Moderations: [], Faces: [], sending: Array(3).fill(true) });
 
 			const { file } = this.state;
-			const queryParams = ('width' in file) ? `?width=${file.width}&height=${file.height}` : '';
+			const [ width, height ] = ('width' in file) ? [ file.width, file.height ] : [ 1, 1 ];
+			const queryParams = `?width=${width}&height=${height}`;
 			const body = file.src || this.imgInputRef.current.files[0];
 			const options = {
 				headers: {

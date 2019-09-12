@@ -14,4 +14,20 @@
         max-width: 50px;
         max-height: 50px;
     }
+
+    & > .spicy {
+        position: absolute;
+        bottom: 15px;
+        right: 60px;
+        max-width: 40px;
+        max-height: 40px;
+    }
+
+    & > .adult {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        max-width: 40px;
+        max-height: 40px;
+    }
 }

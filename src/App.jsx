@@ -136,7 +136,7 @@ class App extends React.Component {
 				})
 			;
 
-			post('https://87e9835d.ngrok.io/api/cognitveServices/analyze' + queryParams, body, options)
+			post('https://localhost:44302/api/cognitveServices/analyze' + queryParams, body, options)
 				.then(({ data }) => this.addDataToState(1, data))
 				.catch(error => {
 					this.addEmptyResultToState(1);
@@ -157,7 +157,7 @@ class App extends React.Component {
 	}
 
 	render() {
-		const { preview, loadedFileName, jsons, Faces, sending } = this.state;
+		const { preview, loadedFileName, jsons, Faces, Moderations, sending } = this.state;
 
 		return (
 			<div className={ preview ? 'App' : 'App no-image' }>
@@ -191,6 +191,7 @@ class App extends React.Component {
 										key={`image-container-${index}`}
 										preview={preview}
 										faces={Faces[index]}
+										moderation = {Moderations[index]}
 										color={this.colors[index]}
 										index={index}
 									/>

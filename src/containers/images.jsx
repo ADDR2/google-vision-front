@@ -6,6 +6,9 @@ import AmazonLogo from '../assets/Amazon-Logo.png';
 import AzureLogo from '../assets/Azure-Logo.png';
 import GoogleLogo from '../assets/Google-Logo.png';
 
+import Spicy from '../assets/Spicy.png';
+import Adult from '../assets/Adult.png';
+
 const defaultStyles = {
     position: 'absolute',
     fill: 'none',
@@ -19,10 +22,22 @@ const imagesArray = [
     { class: 'google-logo', src: GoogleLogo }
 ];
 
-export default ({ preview, faces, color, index }) => {
+export default ({ preview, faces, moderation, color, index }) => {
     return (
         <div className="canvas">
             <img alt="logo" className="logo" src={imagesArray[index].src}/>
+            { moderation && moderation.IsAdultContent ?
+                    <img alt="Adult" className="adult" src={Adult}/>
+                    :
+                    <></>  
+            }    
+            
+            { moderation && moderation.IsSpicyContent ?
+                    <img alt="Spicy" className="spicy" src={Spicy}/> 
+                    :
+                    <></>
+            }
+
             <img alt="Input" className="image" src={preview}/>
             { faces ?
                     faces.map(({ Box: { Top, Left, Width, Height }, Landmarks }, index) => (

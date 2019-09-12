@@ -209,7 +209,7 @@ class App extends React.Component {
 							<CircularProgress
 								key={`spinner-${index}`}
 								size={80}
-								style={{ margin: '5rem auto 0 auto' }}
+								style={{ margin: '5rem 40% 0 40%' }}
 							/>
 						:
 							( jsons[index] ?

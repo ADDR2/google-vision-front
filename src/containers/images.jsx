@@ -22,41 +22,79 @@ const imagesArray = [
     { class: 'google-logo', src: GoogleLogo }
 ];
 
-export default ({ preview, faces, moderation, color, index }) => {
-    return (
-        <div className="canvas">
-            <img alt="logo" className="logo" src={imagesArray[index].src}/>
-            { moderation && moderation.IsAdultContent ?
-                    <img alt="Adult" className="adult" src={Adult}/>
-                    :
-                    <></>  
-            }    
-            
-            { moderation && moderation.IsSpicyContent ?
-                    <img alt="Spicy" className="spicy" src={Spicy}/> 
-                    :
-                    <></>
-            }
+class Images extends React.Component {
+    constructor() {
+        super();
 
-            <img alt="Input" className="image" src={preview}/>
-            { faces ?
-                    faces.map(({ Box: { Top, Left, Width, Height }, Landmarks }, index) => (
-                        <div key={`face-${index}`}>
-                            <svg
-                                width={Width}
-                                height={Height}
-                                xmlns="http://www.w3.org/2000/svg"
-                                style={{ top: Top, left: Left, ...defaultStyles, stroke: color }}
-                            >
-                                <rect x="0" y="0" width={Width} height={Height}/>
-                            </svg>
-                            <LandmarkList Landmarks={Landmarks} color={color}/>
-                        </div>
-                    ))
-                :
+        this.imgRef = React.createRef();
 
-                    <></>
-            }
-        </div>
-    );
-};
+        this.state = {
+            divWidth: 600,
+            divHeight: 600,
+            divMarginLeft: '0'
+        };
+    }
+
+    adjustDivSize = () => {
+        const { width, height } = this.imgRef.current;
+        const { clientWidth } = document.querySelector('.image-container');
+
+        this.setState({
+            divWidth: width,
+            divHeight: height,
+            divMarginLeft: `${( (clientWidth/3) - width )/2}px`
+        });
+    }
+
+    getSecondFrame = () => {
+        requestAnimationFrame(this.adjustDivSize);
+    }
+
+    getFirstframe = () => {
+        requestAnimationFrame(this.getSecondFrame);
+    }
+
+    render() {
+        const { divWidth, divHeight, divMarginLeft } = this.state;
+        const { preview, faces, moderation, color, index } = this.props;
+
+        return (
+            <div className="canvas" style={{ width: divWidth, height: divHeight, marginLeft: divMarginLeft }}>
+                <img alt="logo" className="logo" src={imagesArray[index].src}/>
+                { moderation && moderation.IsAdultContent ?
+                        <img alt="Adult" className="adult" src={Adult}/>
+                        :
+                        <></>  
+                }    
+                
+                { moderation && moderation.IsSpicyContent ?
+                        <img alt="Spicy" className="spicy" src={Spicy}/> 
+                        :
+                        <></>
+                }
+    
+                <img alt="Input" ref={this.imgRef} className="image" src={preview} onLoad={this.getFirstframe}/>
+                { faces ?
+                        faces.map(({ Box: { Top, Left, Width, Height }, Landmarks }, index) => (
+                            <div key={`face-${index}`}>
+                                <svg
+                                    width={Width}
+                                    height={Height}
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    style={{ top: Top, left: Left, ...defaultStyles, stroke: color }}
+                                >
+                                    <rect x="0" y="0" width={Width} height={Height}/>
+                                </svg>
+                                <LandmarkList Landmarks={Landmarks} color={color}/>
+                            </div>
+                        ))
+                    :
+    
+                        <></>
+                }
+            </div>
+        );
+    }
+}
+
+export default Images;
